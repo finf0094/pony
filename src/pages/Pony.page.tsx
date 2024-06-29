@@ -4,7 +4,7 @@ import {PonyFilter} from "@/modules/pony/ui/PonyFilter/PonyFilter";
 import {PonyList} from "@/modules/pony/ui/PonyList/PonyList";
 import {useEffect, useState} from "react";
 import {faker} from '@faker-js/faker';
-import {useOnlineStatus} from "@/shared/lib";
+import {useNetwork} from "@/shared/lib/hooks/useOnlineStatus";
 
 const generatePonies = (count: number): Pony[] => {
     const colors = ['Фиолетовый', 'Голубой', 'Розовый', 'Красный', 'Зеленый'];
@@ -29,7 +29,7 @@ export const PonyPage = () => {
         return savedCart ? JSON.parse(savedCart) : [];
     });
     const [isLoading, setIsLoading] = useState(false);
-    const isOnline = useOnlineStatus();
+    const networkStatus = useNetwork();
 
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -63,7 +63,7 @@ export const PonyPage = () => {
     };
 
     const handlePurchase = () => {
-        if (isOnline) {
+        if (networkStatus.online) {
             setIsLoading(true);
             // Simulate server request
             setTimeout(() => {
@@ -92,9 +92,8 @@ export const PonyPage = () => {
                         {cart.map((pony, index) => (
                             <li key={index}>{pony.name} - {pony.price}</li>
                         ))}
-                        <Button onClick={handlePurchase} color={isOnline ? 'primary' : 'error'}
-                                disabled={!isOnline || isLoading}>
-                            {isLoading ? 'Loading...' : (isOnline ? 'Purchase' : 'No Internet Connection')}
+                        <Button onClick={handlePurchase} disabled={!networkStatus.online || isLoading}>
+                            {isLoading ? 'Loading...' : (networkStatus.online ? 'Purchase' : 'No Internet Connection')}
                         </Button>
                     </>
                 )}

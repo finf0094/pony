@@ -1,37 +1,112 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-export const useOnlineStatus = () => {
-    const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+import { isClient } from '../utils/isClient';
+import type { Connection } from '../types';
 
-    const checkOnlineStatus = async () => {
-        try {
-            const response = await fetch("https://jsonplaceholder.typicode.com/todos?page=1", { method: 'HEAD' });
-            return response.ok;
-        } catch (error) {
-            console.error('Error checking online status:', error);
-            return false;
+declare global {
+    interface Navigator {
+        readonly connection: Connection;
+        readonly mozConnection: Connection;
+        readonly webkitConnection: Connection;
+    }
+}
+
+/** The type of network connection */
+export type ConnectionType = Connection['type'];
+/** The effective type of connection */
+export type ConnectionEffectiveType = Connection['effectiveType'];
+
+/** The use network return type */
+export interface UseNetworkReturn {
+    /** Indicates if the device is currently online */
+    online: boolean;
+    /** The estimated downlink speed in megabits per seconds */
+    downlink?: Connection['downlink'];
+    /** The maximum downlink speed, if available */
+    downlinkMax?: Connection['downlinkMax'];
+    /** The effective type of connection (e.g., '2g', '3g', '4g') */
+    effectiveType?: Connection['effectiveType'];
+    /** The estimated round-trip time in milliseconds */
+    rtt?: Connection['rtt'];
+    /** Indicates if the user has enabled data saving mode */
+    saveData?: Connection['saveData'];
+    /** The type of network connection (e.g., 'wifi', 'cellular') */
+    type?: Connection['type'];
+}
+
+export const getConnection = () =>
+    navigator?.connection || navigator?.mozConnection || navigator?.webkitConnection;
+
+/**
+ * @name useNetwork
+ * @description - Hook to track network status
+ * @category Sensors
+ *
+ * @returns {UseNetworkReturn} An object containing the network status
+ *
+ * @example
+ * const { online, downlink, downlinkMax, effectiveType, rtt, saveData, type } = useNetwork();
+ */
+export const useNetwork = (): UseNetworkReturn => {
+    const [value, setValue] = useState(() => {
+        if (!isClient) {
+            return {
+                online: false,
+                type: undefined,
+                effectiveType: undefined,
+                saveData: false,
+                downlink: 0,
+                downlinkMax: 0,
+                rtt: 0
+            };
         }
-    };
+        const online = navigator.onLine;
+        const connection = getConnection();
+
+        return {
+            online,
+            downlink: connection?.downlink,
+            downlinkMax: connection?.downlinkMax,
+            effectiveType: connection?.effectiveType,
+            rtt: connection?.rtt,
+            saveData: connection?.saveData,
+            type: connection?.type
+        };
+    });
 
     useEffect(() => {
-        const updateOnlineStatus = async () => {
-            const online = await checkOnlineStatus();
-            setIsOnline(online);
+        const callback = () => {
+            const online = navigator.onLine;
+            const connection = getConnection();
+
+            setValue({
+                online,
+                downlink: connection?.downlink,
+                downlinkMax: connection?.downlinkMax,
+                effectiveType: connection?.effectiveType,
+                rtt: connection?.rtt,
+                saveData: connection?.saveData,
+                type: connection?.type
+            });
         };
+        window.addEventListener('online', callback, { passive: true });
+        window.addEventListener('offline', callback, { passive: true });
 
-        updateOnlineStatus();
+        const connection = getConnection();
 
-        const handleOnline = () => setIsOnline(true);
-        const handleOffline = () => setIsOnline(false);
-
-        window.addEventListener('online', handleOnline);
-        window.addEventListener('offline', handleOffline);
+        if (connection) {
+            connection.addEventListener('change', callback, { passive: true });
+        }
 
         return () => {
-            window.removeEventListener('online', handleOnline);
-            window.removeEventListener('offline', handleOffline);
-        };
-    }, []);
+            window.removeEventListener('online', callback);
+            window.removeEventListener('offline', callback);
 
-    return isOnline;
+            if (connection) {
+                connection.removeEventListener('change', callback);
+            }
+        };
+    });
+
+    return value;
 };
