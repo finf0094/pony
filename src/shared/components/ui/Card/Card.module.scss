@@ -1,0 +1,43 @@
+.root {
+  --card-padding: var(--spacing-md);
+
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: var(--card-padding);
+  box-shadow: var(--card-shadow);
+  color: var(--color-text);
+
+  &.withBorder {
+    border: 1px solid var(--color-border);
+  }
+}
+
+.section {
+  display: block;
+  margin-inline: calc(var(--card-padding) * -1);
+
+  &:first-child {
+    margin-top: calc(var(--card-padding) * -1);
+    border-top: none !important;
+  }
+
+  &:last-child {
+    margin-bottom: calc(var(--card-padding) * -1);
+    border-bottom: none !important;
+  }
+
+  &[data-inherit-padding] {
+    padding-inline: var(--card-padding);
+  }
+
+  &[data-with-border] {
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  & + & {
+    border-top: none !important;
+  }
+}

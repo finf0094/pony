@@ -1,0 +1,174 @@
+.Input__Wrapper {
+  font-weight: 400;
+
+  display: inline-block;
+  position: relative;
+  margin-top: var(--input-margin-top, 0rem);
+  margin-bottom: var(--input-margin-bottom, 0rem);
+
+  --input-height-xs: calc(1.875rem * var(--scale));
+  --input-height-sm: calc(2.25rem * var(--scale));
+  --input-height-md: calc(2.625rem * var(--scale));
+  --input-height-lg: calc(3.125rem * var(--scale));
+  --input-height-xl: calc(3.75rem * var(--scale));
+  --input-height: var(--input-height-sm);
+
+  --input-padding: calc(var(--input-height) / 3);
+  --input-padding-inline-start: var(--input-padding);
+  --input-padding-inline-end: var(--input-padding);
+
+  --input-padding-y-xs: calc(0.3125rem * var(--scale));
+  --input-padding-y-sm: calc(0.375rem * var(--scale));
+  --input-padding-y-md: calc(0.5rem * var(--scale));
+  --input-padding-y-lg: calc(0.625rem * var(--scale));
+  --input-padding-y-xl: calc(0.8125rem * var(--scale));
+  --input-padding-y: var(--input-padding-y-sm);
+
+  --input-color: #1A202C;
+  --input-background: #FFFFFF;
+  --input-radius: 7px;
+  --input-border-color: #CCCCCC;
+  --input-focus-border-color: var(--chi-color-primary);
+  --input-placeholder-color: #AAAAAA;
+  --input-disabled-bg: #f9f9f9;
+  --input-disabled-color: #CCCCCCC;
+  --input-fill-background: #F1F0F5;
+  --input-text-align: left;
+
+  --input-before-size: calc(var(--input-height) - 2px);
+  --input-after-size: calc(var(--input-height) - 2px);
+
+  &.xs {
+    --input-height: var(--input-height-xs);
+    --input-padding-y: var(--input-padding-y-xs);
+  }
+
+  &.sm {
+    --input-height: var(--input-height-sm);
+    --input-padding-y: var(--input-padding-y-sm);
+  }
+
+  &.md {
+    --input-height: var(--input-height-md);
+    --input-padding-y: var(--input-padding-y-md);
+  }
+
+  &.lg {
+    --input-height: var(--input-height-lg);
+    --input-padding-y: var(--input-padding-y-lg);
+  }
+
+  &.xl {
+    --input-height: var(--input-height-xl);
+    --input-padding-y: var(--input-padding-y-xl);
+  }
+
+  &.default {
+    input {
+      border: 1px solid var(--input-border-color);
+      background-color: var(--input-background);
+    }
+  }
+
+  &.filled {
+    input {
+      border: none;
+      background-color: var(--input-fill-background);
+    }
+  }
+
+  &.clear {
+    input {
+      border: none;
+      background-color: transparent;
+    }
+  }
+
+  &.Input__before {
+    --input-padding-inline-start: calc(var(--input-before-size) + var(--input-padding) - 6px);
+  }
+
+  &.Input__after {
+    --input-padding-inline-end: calc(var(--input-after-size) + var(--input-padding) - 6px);
+  }
+
+  &.Input__fullwidth {
+    width: 100%;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .Input {
+    appearance: none;
+    height: var(--input-height);
+    line-height: calc(var(--input-height) - 2px);
+    text-align: var(--input-text-align);
+    color: var(--input-color);
+    background-color: var(--input-background);
+    border-radius: var(--input-radius);
+    padding-inline-start: var(--input-padding-inline-start);
+    padding-inline-end: var(--input-padding-inline-end);
+    padding-top: var(--input-padding-y, 0rem);
+    padding-bottom: var(--input-padding-y, 0rem);
+    border: 1px solid var(--input-border-color);
+    cursor: var(--input-cursor, text);
+
+    &:focus,
+    &:focus-within {
+      outline: none;
+      border-color: var(--input-focus-border-color);
+    }
+
+    &::placeholder {
+      color: var(--input-placeholder-color);
+    }
+
+    &:disabled {
+      background-color: var(--input-disabled-bg);
+      color: var(--input-disabled-color);
+    }
+  }
+
+  .Input__before,
+  .Input__after {
+    width: calc(var(--input-height) * 1.25);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    padding: 0 var(--input-padding);
+    align-items: center;
+  }
+
+  .Input__before {
+    left: 0;
+  }
+
+  .Input__after {
+    right: 0;
+  }
+}
+
+.InputLabel {
+  display: inline-block;
+  font-weight: 500;
+  word-break: break-word;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.InputLabel__required {
+  color: red;
+}
+
+.InputError {
+  font-weight: 400;
+  word-wrap: break-word;
+  line-height: 1.2;
+  display: block;
+  margin: 0;
+  padding: 0;
+  color: red;
+}

@@ -1,0 +1,20 @@
+@import 'reset';
+@import 'variables';
+
+
+body {
+  font-family: var(--font-family-main), sans-serif;
+  font-size: var(--font-size-sm);
+  background-color: var(--chi-color-body);
+  color: var(--chi-color-text);
+}
+
+.app-wrapper {
+  --app-wrapper-margin: 7.5px;
+  --app-wrapper-vertical-margin: calc(2 * var(--app-wrapper-margin));
+
+  background-color: var(--chi-color-app-wrapper);
+  margin: var(--app-wrapper-margin);
+  border-radius: var(--radius-lg);
+  min-height: calc(100vh - var(--app-wrapper-vertical-margin));
+}

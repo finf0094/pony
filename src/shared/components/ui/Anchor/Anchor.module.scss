@@ -1,0 +1,25 @@
+.root {
+  --anchor-font-size: var(--font-size-sm);
+  --anchor-color: var(--chi-color-primary);
+
+  color: var(--anchor-color);
+  text-decoration: none;
+  appearance: none;
+  border: none;
+  display: inline;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: var(--anchor-font-size);
+
+  &.underline-hover {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &.underline-always {
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,9 @@
+.Text {
+  --font-weight: 400;
+  --font-size: var(--font-size-md);
+  --text-color: var(--chi-color-primary);
+
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  color: var(--text-color);
+}
